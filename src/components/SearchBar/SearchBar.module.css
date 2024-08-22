@@ -1,7 +1,12 @@
-.header {
-  background-color: blue;
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
+  background-color: blue;
+  padding: 20px 0;
 }
+
 .form {
   display: flex;
   width: 500px;

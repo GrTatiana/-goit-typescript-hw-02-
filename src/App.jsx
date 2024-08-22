@@ -1,63 +1,76 @@
 import { useEffect, useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
 import "./App.css";
 import SearchBar from "./components/SearchBar/SearchBar";
-import toast from "react-hot-toast";
-import getImages from "./api";
+import toast, { Toaster } from "react-hot-toast";
 import Loader from "./components/Loader/Loader";
 import LoadMoreBtn from "./components/LoadMoreBtn/LoadMoreBtn";
-const notify = () => toast("Please enter a search query.");
+import getPhotos from "./api";
+import ImageGallery from "./components/ImageGallery/ImageGallery";
+import ErrorMessage from "./components/ErrorMessage/ErrorMessage";
+import ImageModal from "./components/ImageModal/ImageModal";
 
 function App() {
-  const [searchQuery, setSearchQuery] = useState("");
+  const [query, setQuery] = useState("");
   const [images, setImages] = useState([]);
   const [page, setPage] = useState(1);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [isEmpty, setIsEmpty] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
-  const [isOpenModal, setisOpenModal] = useState(false);
+  const [modalData, setModalData] = useState(null);
 
-  const openModal = () => {
-    setisOpenModal(true);
+  const openModal = (imgUrl, imgAlt) => {
+    setModalData({ imgUrl, imgAlt });
   };
 
   const closeModal = () => {
-    setisOpenModal(false);
+    setModalData(null);
   };
 
-  // useEffect(() => {
-  //   if (!query) {
-  //     return notify();
-  //   }
-  //   const fetchImages = async () => {
-  //     setLoading(true);
-  //     setError(null);
-  //     try {
-  //       const { per_page, total_results, photos } = await getImages(
-  //         query,
-  //         page
-  //       );
-  //       if (!photos.length) {
-  //         return setIsEmpty(true);
-  //       }
-  //       setImages((prevImages) => [...prevImages, ...photos]);
-  //       setIsVisible(page < Math.ceil(total_results / per_page));
-  //     } catch (error) {
-  //       setError(error);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-  //   fetchImages();
-  // }, [query, page]);
+  const escCloseModal = (e) => {
+    if (e.key === "Escape") {
+      setModalData(null);
+    }
+  };
+
+  useEffect(() => {
+    const fetchImages = async () => {
+      if (!query || query.trim() === "") {
+        toast.error("Enter search term");
+        return;
+      }
+      try {
+        setLoading(true);
+        setError(null);
+        const data = await getPhotos(query, page);
+        const getPhotosData = data.results;
+        if (!getPhotosData || getPhotosData.length === 0) {
+          setIsEmpty(true);
+          console.log("No images found");
+          const notify = () =>
+            toast.error(
+              "Sorry, there are no images matching your search query. Please try again.",
+              {
+                position: "top-center",
+                duration: 3000,
+                style: { marginTop: 110 },
+              }
+            );
+          notify();
+        }
+        setImages((prevPhotos) => [...prevPhotos, ...getPhotosData]);
+        setIsVisible(page < data.total_pages);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchImages();
+  }, [query, page]);
 
   const handleSubmit = (value) => {
-    if (searchQuery.trim() === "") {
-      return notify();
-    }
-    searchQuery(value);
+    setQuery(value);
     setImages([]);
     setPage(1);
     setIsVisible(false);
@@ -72,17 +85,20 @@ function App() {
   return (
     <>
       <SearchBar onSubmit={handleSubmit} />
-      {images.length > 0 && <ImageGallery images={images} />}
-      {isVisible && <LoadMoreBtn onClick={onLoadMoreBtn} disabled={loading} />}
-      {!photos.length && !isEmpty && (
-        <Text textAlign="center">Let`s begin search 🔎</Text>
+      {images.length > 0 && (
+        <ImageGallery images={images} openModal={openModal} />
       )}
       {loading && <Loader />}
-      {error && (
-        <Text textAlign="center">❌ Something went wrong - {error}</Text>
-      )}
-      {isEmpty && (
-        <Text textAlign="center">Sorry. There are no images ... 😭</Text>
+      {isVisible && <LoadMoreBtn onClick={onLoadMoreBtn} disabled={loading} />}
+      {error && <ErrorMessage message={error} />}
+      {isEmpty && <Toaster />}
+      {modalData && (
+        <ImageModal
+          isOpen={!!modalData}
+          imgUrl={modalData?.imgUrl}
+          imgAlt={modalData?.imgAlt}
+          closeModal={closeModal || escCloseModal}
+        />
       )}
     </>
   );

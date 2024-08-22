@@ -1,0 +1,14 @@
+.list {
+  list-style-type: none;
+  padding: 70px 30px 30px 30px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  background-color: rgb(250, 240, 226);
+}
+.listItem {
+  flex-basis: calc((100% - 60px) / 3);
+  overflow: hidden;
+  box-sizing: border-box;
+}

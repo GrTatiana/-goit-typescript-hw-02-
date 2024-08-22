@@ -1,12 +1,21 @@
-import React from "react";
+import ImageCard from "../ImageCard/ImageCard";
+import css from "./ImageGallery.module.css";
 
-const ImageGallery = () => {
+const ImageGallery = ({ images, openModal }) => {
   return (
-    <Grid>
-      {data.map(({ id, description, urls }) => (
-        <ImageCard key={id} url={urls.small} alt={} src={description} />
+    <ul className={css.list}>
+      {images.map(({ id, description, urls: { small, regular } }) => (
+        <li key={id} className={css.listItem}>
+          <ImageCard
+            small={small}
+            regular={regular}
+            description={description}
+            openModal={openModal}
+          />
+        </li>
       ))}
-    </Grid>
+    </ul>
   );
 };
+
 export default ImageGallery;

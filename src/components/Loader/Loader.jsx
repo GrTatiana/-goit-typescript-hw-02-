@@ -1,15 +1,16 @@
-import { InfinitySpin } from "react-loader-spinner";
+import { RevolvingDot } from "react-loader-spinner";
 
 const Loader = () => {
   return (
-    <div>
-      <InfinitySpin
-        visible={true}
-        width="200"
-        color="#0000ff"
-        ariaLabel="infinity-spin-loading"
-      />
-    </div>
+    <RevolvingDot
+      visible={true}
+      height="80"
+      width="80"
+      color="blue"
+      ariaLabel="revolving-dot-loading"
+      wrapperStyle={{}}
+      wrapperClass=""
+    />
   );
 };
 export default Loader;

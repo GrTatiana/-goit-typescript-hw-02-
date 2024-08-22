@@ -1,13 +1,16 @@
-import React from "react";
+import css from "./ImageCard.module.css";
 
-export const ImageCard = () => {
+const ImageCard = ({ description, small, regular, openModal }) => {
   return (
-    <GridItem>
-      <div>
-        // style={{ backgroundColor: avg_color, borderColor: avg_color }}
-        <img src={urls.large} alt={description} />
-      </div>
-    </GridItem>
+    <div>
+      <img
+        className={css.image}
+        src={small}
+        alt={description}
+        onClick={() => openModal(regular, description)}
+      />
+    </div>
   );
-  <div></div>;
 };
+
+export default ImageCard;
