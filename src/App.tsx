@@ -8,18 +8,32 @@ import getPhotos from "./api";
 import ImageGallery from "./components/ImageGallery/ImageGallery";
 import ErrorMessage from "./components/ErrorMessage/ErrorMessage";
 import ImageModal from "./components/ImageModal/ImageModal";
+import { string } from "yup";
 
-function App() {
-  const [query, setQuery] = useState("");
-  const [images, setImages] = useState([]);
-  const [page, setPage] = useState(1);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [isEmpty, setIsEmpty] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
-  const [modalData, setModalData] = useState(null);
+type Modal = {
+  imgUrl: string;
+  imgAlt: string;
+};
 
-  const openModal = (imgUrl, imgAlt) => {
+type Image = {
+  id: string;
+  description: string;
+  urls: {
+    small: string;
+    regular: string;
+  };
+};
+const App: React.FC = () => {
+  const [query, setQuery] = useState<string>("");
+  const [images, setImages] = useState<Image[]>([]);
+  const [page, setPage] = useState<number>(1);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [isEmpty, setIsEmpty] = useState<boolean>(false);
+  const [isVisible, setIsVisible] = useState<boolean>(false);
+  const [modalData, setModalData] = useState<Modal | null>(null);
+
+  const openModal = (imgUrl: string, imgAlt: string) => {
     setModalData({ imgUrl, imgAlt });
   };
 
@@ -27,8 +41,8 @@ function App() {
     setModalData(null);
   };
 
-  const escCloseModal = (e) => {
-    if (e.key === "Escape") {
+  const escCloseModal = (event: KeyboardEvent) => {
+    if (event.key === "Escape") {
       setModalData(null);
     }
   };
@@ -60,7 +74,7 @@ function App() {
         }
         setImages((prevPhotos) => [...prevPhotos, ...getPhotosData]);
         setIsVisible(page < data.total_pages);
-      } catch (error) {
+      } catch (error: any) {
         setError(error.message);
       } finally {
         setLoading(false);
@@ -69,7 +83,7 @@ function App() {
     fetchImages();
   }, [query, page]);
 
-  const handleSubmit = (value) => {
+  const handleSubmit = (value: string) => {
     setQuery(value);
     setImages([]);
     setPage(1);
@@ -102,6 +116,6 @@ function App() {
       )}
     </>
   );
-}
+};
 
 export default App;

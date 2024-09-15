@@ -1,6 +1,18 @@
 import css from "./ImageCard.module.css";
 
-const ImageCard = ({ description, small, regular, openModal }) => {
+type Props = {
+  description: string;
+  small: string;
+  regular: string;
+  openModal: (imageUrl: string, description: string) => void;
+};
+
+const ImageCard: React.FC<Props> = ({
+  description,
+  small,
+  regular,
+  openModal,
+}) => {
   return (
     <div>
       <img
