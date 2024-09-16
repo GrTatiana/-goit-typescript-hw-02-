@@ -104,7 +104,8 @@ const App: React.FC = () => {
           isOpen={!!modalData}
           imgUrl={modalData?.imgUrl}
           imgAlt={modalData?.imgAlt}
-          closeModal={closeModal || escCloseModal}
+          closeModal={closeModal}
+          escCloseModal={escCloseModal}
         />
       )}
     </>

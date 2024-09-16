@@ -21,7 +21,7 @@ Modal.setAppElement("#root");
 interface ModalProps {
   isOpen: boolean;
   closeModal: () => void;
-  escCloseModal: boolean;
+  escCloseModal: (event: KeyboardEvent) => void;
   imgUrl: string;
   imgAlt: string;
 }
@@ -29,7 +29,7 @@ interface ModalProps {
 const ImageModal: React.FC<ModalProps> = ({
   isOpen,
   closeModal,
-  escCloseModal = false,
+  escCloseModal,
   imgUrl,
   imgAlt,
 }) => {
