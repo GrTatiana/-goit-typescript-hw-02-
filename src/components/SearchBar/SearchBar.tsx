@@ -3,18 +3,17 @@ import css from "./SearchBar.module.css";
 import { FcSearch } from "react-icons/fc";
 import { FormEvent } from "react";
 
-type Props = {
+interface SearchBarProps {
   onSubmit: (query: string) => void;
-};
+}
 
-const SearchBar: React.FC<Props> = ({ onSubmit }) => {
+const SearchBar: React.FC<SearchBarProps> = ({ onSubmit }) => {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const form = event.target;
     const query = (
       form.elements.namedItem("query") as HTMLInputElement
     ).value.trim();
-
     if (query.trim() === "") {
       toast.error("Please enter a search term.");
       return;

@@ -9,20 +9,13 @@ import ImageGallery from "./components/ImageGallery/ImageGallery";
 import ErrorMessage from "./components/ErrorMessage/ErrorMessage";
 import ImageModal from "./components/ImageModal/ImageModal";
 import { string } from "yup";
+import { Image } from "./App.types";
 
-type Modal = {
+interface Modal {
   imgUrl: string;
   imgAlt: string;
-};
+}
 
-type Image = {
-  id: string;
-  description: string;
-  urls: {
-    small: string;
-    regular: string;
-  };
-};
 const App: React.FC = () => {
   const [query, setQuery] = useState<string>("");
   const [images, setImages] = useState<Image[]>([]);
@@ -37,11 +30,11 @@ const App: React.FC = () => {
     setModalData({ imgUrl, imgAlt });
   };
 
-  const closeModal = () => {
+  const closeModal = (): void => {
     setModalData(null);
   };
 
-  const escCloseModal = (event: KeyboardEvent) => {
+  const escCloseModal = (event: KeyboardEvent): void => {
     if (event.key === "Escape") {
       setModalData(null);
     }
@@ -104,7 +97,7 @@ const App: React.FC = () => {
       )}
       {loading && <Loader />}
       {isVisible && <LoadMoreBtn onClick={onLoadMoreBtn} disabled={loading} />}
-      {error && <ErrorMessage message={error} />}
+      {error && <ErrorMessage error={error} />}
       {isEmpty && <Toaster />}
       {modalData && (
         <ImageModal

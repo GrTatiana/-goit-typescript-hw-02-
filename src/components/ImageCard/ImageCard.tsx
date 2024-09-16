@@ -1,13 +1,13 @@
 import css from "./ImageCard.module.css";
 
-type Props = {
+type ImageCardProps = {
   description: string;
   small: string;
   regular: string;
   openModal: (imageUrl: string, description: string) => void;
 };
 
-const ImageCard: React.FC<Props> = ({
+const ImageCard: React.FC<ImageCardProps> = ({
   description,
   small,
   regular,

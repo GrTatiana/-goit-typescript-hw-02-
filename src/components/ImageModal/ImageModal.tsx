@@ -18,18 +18,18 @@ const customStyles = {
 
 Modal.setAppElement("#root");
 
-type ModalProps = {
+interface ModalProps {
   isOpen: boolean;
   closeModal: () => void;
-  escCloseModal: () => void;
+  escCloseModal: boolean;
   imgUrl: string;
   imgAlt: string;
-};
+}
 
 const ImageModal: React.FC<ModalProps> = ({
   isOpen,
   closeModal,
-  escCloseModal,
+  escCloseModal = false,
   imgUrl,
   imgAlt,
 }) => {
